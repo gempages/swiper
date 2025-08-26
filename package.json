@@ -1,6 +1,6 @@
 {
- "name": "gem-sdk/swiper",
-  "version": "0.0.1",
+ "name": "@gem-sdk/swiper",
+  "version": "0.0.2",
   "description": "Gem SDK - Swiper, Customized of swiper",
   "type": "module",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nolimits4web/Swiper.git"
+    "url": "https://github.com/gempages/swiper.git"
   },
   "keywords": [
     "swiper",
