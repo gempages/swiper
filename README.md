@@ -1,4 +1,4 @@
-<p align="center">
+<p align="center"> 
   <img src="https://swiperjs.com/images/share-banner.jpg"/>
 </p>
 
