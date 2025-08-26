@@ -1,6 +1,6 @@
 {
- "name": "@gem-sdk/swiper",
-  "version": "0.0.2",
+  "name": "@gem-sdk/swiper",
+  "version": "0.0.4",
   "description": "Gem SDK - Swiper, Customized of swiper",
   "type": "module",
   "scripts": {
@@ -18,7 +18,7 @@
     "check-format": "npm run prettier -- --list-different",
     "lint": "eslint --ext .js,.jsx .",
     "validate": "npm-run-all --parallel check-format lint",
-    "release": "npm run validate && node ./scripts/release",
+    "release": "node ./scripts/release",
     "test": "npm run validate && npm run build:prod",
     "changelog": "npx conventional-changelog -p angular -i CHANGELOG.md -u -s",
     "build-sponsors": "node scripts/build-sponsors.js"
@@ -45,10 +45,10 @@
     "vue",
     "slideshow"
   ],
-  "author": "Vladimir Kharlampidi",
+  "author": "gem-pages",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nolimits4web/swiper/issues"
+    "url": "https://github.com/gempages/swiper/pulls"
   },
   "homepage": "https://swiperjs.com",
   "funding": [
