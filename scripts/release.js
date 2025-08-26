@@ -1,5 +1,4 @@
 import exec from 'exec-sh';
-import inquirer from 'inquirer';
 import fs from 'fs';
 import path from 'path';
 import { rimraf } from 'rimraf';
@@ -18,62 +17,13 @@ async function release() {
   });
   const releaseDate = formatter.format(date);
 
-  const options = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'version',
-      message: 'Version:',
-      default: pkg.version,
-    },
-    {
-      type: 'list',
-      name: 'alpha',
-      message: 'Alpha?',
-      when: (opts) => opts.version.indexOf('alpha') >= 0,
-      choices: [
-        {
-          name: 'YES',
-          value: true,
-        },
-        {
-          name: 'NO',
-          value: false,
-        },
-      ],
-    },
-    {
-      type: 'list',
-      name: 'beta',
-      message: 'Beta?',
-      when: (opts) => opts.version.indexOf('beta') >= 0,
-      choices: [
-        {
-          name: 'YES',
-          value: true,
-        },
-        {
-          name: 'NO',
-          value: false,
-        },
-      ],
-    },
-    {
-      type: 'list',
-      name: 'next',
-      message: 'Next?',
-      when: (opts) => opts.version.indexOf('next') >= 0,
-      choices: [
-        {
-          name: 'YES',
-          value: true,
-        },
-        {
-          name: 'NO',
-          value: false,
-        },
-      ],
-    },
-  ]);
+  // Auto-release mode - no interactive prompts
+  const options = {
+    version: pkg.version,
+    alpha: false,
+    beta: false,
+    next: false,
+  };
   // Set version
   pkg.version = options.version;
   childPkg.version = options.version;
