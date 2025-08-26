@@ -1,7 +1,7 @@
 {
-  "name": "swiper-src",
-  "version": "11.2.10",
-  "description": "Most modern mobile touch slider and framework with hardware accelerated transitions",
+ "name": "gem-sdk/swiper",
+  "version": "0.0.1",
+  "description": "Gem SDK - Swiper, Customized of swiper",
   "type": "module",
   "scripts": {
     "build": "node scripts/build",
