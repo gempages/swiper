@@ -13,6 +13,17 @@ export default function loopFix({
   const swiper = this;
 
   if (!swiper.params.loop) return;
+
+  // Disable loop mode if the number of slides is less than slidesPerView
+  const currentSlidesPerView =
+    swiper.params.slidesPerView === 'auto'
+      ? swiper.slidesPerViewDynamic()
+      : Math.ceil(parseFloat(swiper.params.slidesPerView, 10));
+
+  if (swiper.slides.length < currentSlidesPerView) {
+    console.warn('Swiper: Loop mode disabled - slides.length < slidesPerView');
+    return;
+  }
   swiper.emit('beforeLoopFix');
   const { slides, allowSlidePrev, allowSlideNext, slidesEl, params } = swiper;
   const { centeredSlides, initialSlide } = params;

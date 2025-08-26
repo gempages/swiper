@@ -12,9 +12,17 @@ export default function slidePrev(speed, runCallbacks = true, internal) {
   if (params.loop) {
     if (animating && !isVirtual && params.loopPreventsSliding) return false;
 
-    swiper.loopFix({ direction: 'prev' });
-    // eslint-disable-next-line
-    swiper._clientLeft = swiper.wrapperEl.clientLeft;
+    // Check if loop is disabled
+    const currentSlidesPerView =
+      params.slidesPerView === 'auto'
+        ? swiper.slidesPerViewDynamic()
+        : Math.ceil(parseFloat(params.slidesPerView, 10));
+
+    if (swiper.slides.length >= currentSlidesPerView) {
+      swiper.loopFix({ direction: 'prev' });
+      // eslint-disable-next-line
+      swiper._clientLeft = swiper.wrapperEl.clientLeft;
+    }
   }
   const translate = rtlTranslate ? swiper.translate : -swiper.translate;
 

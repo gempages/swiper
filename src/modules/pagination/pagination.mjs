@@ -89,6 +89,18 @@ export default function Pagination({ swiper, extendParams, on, emit }) {
     e.preventDefault();
     const index = elementIndex(bulletEl) * swiper.params.slidesPerGroup;
     if (swiper.params.loop) {
+      // Check if loop is disabled
+      const currentSlidesPerView =
+        swiper.params.slidesPerView === 'auto'
+          ? swiper.slidesPerViewDynamic()
+          : Math.ceil(parseFloat(swiper.params.slidesPerView, 10));
+
+      if (swiper.slides.length < currentSlidesPerView) {
+        // Loop is disabled, use slideTo directly
+        swiper.slideTo(index);
+        return;
+      }
+
       if (swiper.realIndex === index) return;
       const moveDirection = getMoveDirection(swiper.realIndex, index, swiper.slides.length);
       if (moveDirection === 'next') {
