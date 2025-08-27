@@ -18,6 +18,10 @@ jobs:
         run: npm install
       - name: Run build
         run: npm run build:prod
+      - name: Setup NPM authentication
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm whoami
       - name: Run release
         run: npm run release
         env:
