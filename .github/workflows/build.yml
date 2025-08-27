@@ -19,6 +19,12 @@ jobs:
       - name: Run build
         run: npm run build:prod
       - name: Setup NPM authentication
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@gem-sdk'
+      - name: Login to NPM
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm whoami
