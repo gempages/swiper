@@ -123,7 +123,7 @@ export default function loopFix({
       }
     }
   } else if (activeColIndexWithShift + slidesPerView > cols - loopedSlides) {
-    slidesAppended = Math.max(activeColIndexWithShift - (cols - loopedSlides * 2), slidesPerView);
+    slidesAppended = Math.max(activeColIndexWithShift - (cols - loopedSlides * 2), slidesPerGroup);
     if (isInitialOverflow) {
       slidesAppended = Math.max(slidesAppended, slidesPerView - cols + initialSlide + 1);
     }
