@@ -36,11 +36,11 @@ async function release() {
   );
 
   if (options.beta) {
-    await exec.promise('cd ./dist && npm publish --tag beta');
+    await exec.promise('cd ./dist && npm publish --tag beta --access public');
   } else if (options.alpha || options.next) {
-    await exec.promise('cd ./dist && npm publish --tag next');
+    await exec.promise('cd ./dist && npm publish --tag next --access public');
   } else {
-    await exec.promise('cd ./dist && npm publish');
+    await exec.promise('cd ./dist && npm publish --access public');
   }
 }
 release();
