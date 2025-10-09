@@ -208,6 +208,11 @@ export interface SwiperEvents {
   loopFix: (swiper: Swiper) => void;
 
   /**
+   * Event will be fired after "loop fix dot"
+   */
+  loopFixDot: (swiper: Swiper) => void;
+
+  /**
    * Event will be fired on breakpoint change
    */
   breakpoint: (swiper: Swiper, breakpointParams: SwiperOptions) => void;

@@ -118,6 +118,10 @@ declare const Swiper: DefineComponent<
       type: PropType<SwiperOptions['spaceBetween']>;
       default: undefined;
     };
+    isSneakPeekCenter: {
+      type: PropType<SwiperOptions['isSneakPeekCenter']>;
+      default: undefined;
+    };
     slidesPerView: {
       type: PropType<SwiperOptions['slidesPerView']>;
       default: undefined;

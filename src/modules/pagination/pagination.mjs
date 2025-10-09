@@ -89,31 +89,52 @@ export default function Pagination({ swiper, extendParams, on, emit }) {
     e.preventDefault();
     const index = elementIndex(bulletEl) * swiper.params.slidesPerGroup;
     if (swiper.params.loop) {
-      // Check if loop is disabled
+      // Kiểm tra xem loop có bị disable không
       const currentSlidesPerView =
         swiper.params.slidesPerView === 'auto'
           ? swiper.slidesPerViewDynamic()
           : Math.ceil(parseFloat(swiper.params.slidesPerView, 10));
 
       if (swiper.slides.length < currentSlidesPerView) {
-        // Loop is disabled, use slideTo directly
+        // Loop bị disable, sử dụng slideTo trực tiếp
         swiper.slideTo(index);
         return;
       }
 
       if (swiper.realIndex === index) return;
-      const moveDirection = getMoveDirection(swiper.realIndex, index, swiper.slides.length);
-      if (moveDirection === 'next') {
+
+      if (
+        index === swiper.realIndex + 1 ||
+        (index === 0 && swiper.realIndex === swiper.slides.length - 1)
+      ) {
         swiper.slideNext();
-      } else if (moveDirection === 'previous') {
+      } else if (
+        index === swiper.realIndex - 1 ||
+        (index === swiper.slides.length - 1 && swiper.realIndex === 0)
+      ) {
         swiper.slidePrev();
+      }
+      // const moveDirection = getMoveDirection(swiper.realIndex, index, swiper.slides.length);
+      if (swiper.params.isSneakPeekCenter) {
+        swiper.slideToLoopCenterSneakPeek(index);
       } else {
         swiper.slideToLoop(index);
       }
+
+      // if (moveDirection === 'next') {
+      //   swiper.slideNext();
+      // } else if (moveDirection === 'previous') {
+      //   swiper.slidePrev();
+      // } else {
+      //   swiper.slideToLoop(index);
+      // }
     } else {
       swiper.slideTo(index);
     }
   }
+
+  // Export function để sử dụng ở ngoài
+  swiper.pagination.onBulletClick = onBulletClick;
 
   function update() {
     // Render || Update Pagination bullets/items
@@ -290,8 +311,8 @@ export default function Pagination({ swiper, extendParams, on, emit }) {
       swiper.virtual && swiper.params.virtual.enabled
         ? swiper.virtual.slides.length
         : swiper.grid && swiper.params.grid.rows > 1
-        ? swiper.slides.length / Math.ceil(swiper.params.grid.rows)
-        : swiper.slides.length;
+          ? swiper.slides.length / Math.ceil(swiper.params.grid.rows)
+          : swiper.slides.length;
 
     let el = swiper.pagination.el;
     el = makeElementsArray(el);

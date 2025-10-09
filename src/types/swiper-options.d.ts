@@ -318,6 +318,13 @@ export interface SwiperOptions {
   spaceBetween?: number | string;
 
   /**
+   * If true, the active slide will be centered
+   *
+   * @default false
+   */
+  isSneakPeekCenter?: boolean;
+
+  /**
    * Number of slides per view (slides visible at the same time on slider's container).
    * @note `slidesPerView: 'auto'` is currently not compatible with multirow mode, when `grid.rows` > 1
    *

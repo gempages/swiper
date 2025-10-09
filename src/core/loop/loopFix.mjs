@@ -14,7 +14,7 @@ export default function loopFix({
 
   if (!swiper.params.loop) return;
 
-  // Disable loop mode if the number of slides is less than slidesPerView
+  // Disable loop mode nếu số slides ít hơn slidesPerView
   const currentSlidesPerView =
     swiper.params.slidesPerView === 'auto'
       ? swiper.slidesPerViewDynamic()
