@@ -1,4 +1,4 @@
-# Changelog
+# Changelog 
 
 # [11.2.10](https://github.com/nolimits4web/Swiper/compare/v11.2.9...v11.2.10) (2025-06-28)
 
