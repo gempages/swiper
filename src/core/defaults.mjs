@@ -104,6 +104,7 @@ export default {
   loopAddBlankSlides: true,
   loopAdditionalSlides: 0,
   loopPreventsSliding: true,
+  isSneakPeekCenter: false,
 
   // rewind
   rewind: false,

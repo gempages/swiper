@@ -1,5 +1,6 @@
 import slideTo from './slideTo.mjs';
 import slideToLoop from './slideToLoop.mjs';
+import slideToLoopCenterSneakPeek from './slideToLoopCenterSneakPeek.mjs';
 import slideNext from './slideNext.mjs';
 import slidePrev from './slidePrev.mjs';
 import slideReset from './slideReset.mjs';
@@ -9,6 +10,7 @@ import slideToClickedSlide from './slideToClickedSlide.mjs';
 export default {
   slideTo,
   slideToLoop,
+  slideToLoopCenterSneakPeek,
   slideNext,
   slidePrev,
   slideReset,

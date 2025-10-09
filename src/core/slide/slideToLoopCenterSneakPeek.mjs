@@ -1,4 +1,9 @@
-export default function slideToLoop(index = 0, speed, runCallbacks = true, internal) {
+export default function slideToLoopCenterSneakPeek(
+  index = 0,
+  speed,
+  runCallbacks = true,
+  internal,
+) {
   if (typeof index === 'string') {
     const indexAsNumber = parseInt(index, 10);
 
@@ -40,23 +45,8 @@ export default function slideToLoop(index = 0, speed, runCallbacks = true, inter
       needLoopFix = false;
     }
 
-    if (centeredSlides && needLoopFix) {
-      const direction = centeredSlides
-        ? targetSlideIndex < swiper.activeIndex
-          ? 'prev'
-          : 'next'
-        : targetSlideIndex - swiper.activeIndex - 1 < swiper.params.slidesPerView
-        ? 'next'
-        : 'prev';
-      swiper.loopFix({
-        direction,
-        slideTo: true,
-        activeSlideIndex: direction === 'next' ? targetSlideIndex + 1 : targetSlideIndex - cols + 1,
-        slideRealIndex: direction === 'next' ? swiper.realIndex : undefined,
-      });
-    }
-
-    if (!centeredSlides && needLoopFix) {
+    const isSneakPeekCenter = swiper.params?.isSneakPeekCenter;
+    if (isSneakPeekCenter) {
       let direction;
       let nextSteps;
       let prevSteps;
@@ -81,8 +71,23 @@ export default function slideToLoop(index = 0, speed, runCallbacks = true, inter
     newIndex = swiper.getSlideIndexByData(newIndex);
   }
 
-  requestAnimationFrame(() => {
-    swiper.slideTo(newIndex, speed, runCallbacks, internal);
-  });
-  return swiper;
+  swiper.slideTo(newIndex, speed, runCallbacks, internal);
+  const slides = swiper.slides;
+  if (swiper.params?.isSneakPeekCenter && slides.length > 1 && swiper.activeIndex === 0) {
+    const gap = Math.abs(swiper.snapGrid[1] - swiper.snapGrid[0]);
+    const swiperTranslate = JSON.parse(JSON.stringify(swiper.snapGrid[1]));
+
+    // Move last item to first position only if active slide is the first slide
+    const lastSlide = slides[slides.length - 1];
+    lastSlide.swiperLoopMoveDOM = true;
+    swiper.slidesEl.prepend(lastSlide);
+    lastSlide.swiperLoopMoveDOM = false;
+    swiper.setTransition(0);
+    swiper.setTranslate(-(swiperTranslate + gap));
+    swiper.recalcSlides();
+    swiper.updateSlides();
+    swiper.setTransition(swiper.params.speed);
+    swiper.setTranslate(-swiperTranslate);
+  }
+  return;
 }

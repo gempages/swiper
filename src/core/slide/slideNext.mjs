@@ -15,7 +15,7 @@ export default function slideNext(speed, runCallbacks = true, internal) {
   if (params.loop) {
     if (animating && !isVirtual && params.loopPreventsSliding) return false;
 
-    // Check if loop is disabled
+    // Kiểm tra xem loop có bị disable không
     const currentSlidesPerView =
       params.slidesPerView === 'auto'
         ? swiper.slidesPerViewDynamic()

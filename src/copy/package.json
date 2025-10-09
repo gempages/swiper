@@ -1,6 +1,6 @@
 {
-  "name": "@gem-sdk/swiper",
-  "version": "0.0.7",
+  "name": "gem-sdk-swiper",
+  "version": "0.0.8",
   "description": "Gem SDK - Swiper, Customized of swiper",
   "typings": "swiper.d.ts",
   "type": "module",
@@ -169,7 +169,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gempages/swiper.git"
+    "url": "https://github.com/your-username/gem-sdk-swiper.git"
   },
   "keywords": [
     "swiper",
@@ -190,12 +190,12 @@
     "vue",
     "slideshow"
   ],
-  "author": "GemPages",
+  "author": "Your Name <your-email@example.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gempages/swiper/pulls"
+    "url": "https://github.com/your-username/gem-sdk-swiper/issues"
   },
-  "homepage": "https://swiperjs.com",
+  "homepage": "https://github.com/your-username/gem-sdk-swiper",
   "funding": [
     {
       "type": "patreon",
@@ -209,5 +209,5 @@
   "engines": {
     "node": ">= 4.7.0"
   },
-  "releaseDate": "August 26, 2025"
+  "releaseDate": "September 14, 2025"
 }

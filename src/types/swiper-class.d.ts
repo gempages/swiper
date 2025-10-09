@@ -269,6 +269,16 @@ interface Swiper extends SwiperClass<SwiperEvents> {
   slideToLoop(index: number, speed?: number, runCallbacks?: boolean): Swiper;
 
   /**
+   * Does the same as .slideToLoop but for the case when used with enabled loop and sneak peek center.
+   *
+   * @param index Index number of slide.
+   * @param speed Transition duration (in ms).
+   * @param runCallbacks Set it to false (by default it is true) and transition will
+   *  not produce transition events.
+   */
+  slideToLoopCenterSneakPeek(index: number, speed?: number, runCallbacks?: boolean): Swiper;
+
+  /**
    * Reset swiper position to currently active slide for the duration equal to 'speed'
    * parameter.
    *
