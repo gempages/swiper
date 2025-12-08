@@ -561,6 +561,46 @@ class Swiper {
     return true;
   }
 
+  syncSneakPeekCenter({ speed = 0 } = {}) {
+    const swiper = this;
+    requestAnimationFrame(() => {
+      const slides = swiper.slides;
+
+      if (swiper.params?.isSneakPeekCenter && slides.length > 1) {
+        const isFirstSlide = swiper.activeIndex === 0;
+        const isLastSlide = swiper.activeIndex === slides.length - 1 || swiper.isEnd;
+        const gap = Math.abs(swiper.snapGrid[1] - swiper.snapGrid[0]);
+        const swiperTranslate = structuredClone(swiper.snapGrid[1]);
+
+        if (isFirstSlide) {
+          // Move last item to first position when at first slide
+          const lastSlide = slides.at(-1);
+          lastSlide.swiperLoopMoveDOM = true;
+          swiper.slidesEl.prepend(lastSlide);
+          lastSlide.swiperLoopMoveDOM = false;
+          swiper.setTransition(0);
+          swiper.setTranslate(-(swiperTranslate + gap));
+          swiper.recalcSlides();
+          swiper.updateSlides();
+          swiper.setTransition(speed);
+          swiper.setTranslate(-swiperTranslate);
+        } else if (isLastSlide) {
+          // Move first item to last position when at last slide
+          const firstSlide = slides[0];
+          firstSlide.swiperLoopMoveDOM = true;
+          swiper.slidesEl.append(firstSlide);
+          firstSlide.swiperLoopMoveDOM = false;
+          swiper.setTransition(0);
+          swiper.setTranslate(-(swiperTranslate - gap));
+          swiper.recalcSlides();
+          swiper.updateSlides();
+          swiper.setTransition(speed);
+          swiper.setTranslate(-swiperTranslate);
+        }
+      }
+    });
+  }
+
   init(el) {
     const swiper = this;
     if (swiper.initialized) return swiper;
@@ -632,6 +672,7 @@ class Swiper {
     swiper.initialized = true;
 
     preload(swiper);
+    swiper.syncSneakPeekCenter();
 
     // Emit
     swiper.emit('init');

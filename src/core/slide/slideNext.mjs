@@ -37,5 +37,32 @@ export default function slideNext(speed, runCallbacks = true, internal) {
   if (params.rewind && swiper.isEnd) {
     return swiper.slideTo(0, speed, runCallbacks, internal);
   }
-  return swiper.slideTo(swiper.activeIndex + increment, speed, runCallbacks, internal);
+  requestAnimationFrame(() => {
+    swiper.slideTo(swiper.activeIndex + increment, speed, runCallbacks, internal);
+    const slides = swiper.slides;
+
+    if (
+      swiper.params?.isSneakPeekCenter &&
+      slides.length > 1 &&
+      (swiper.activeIndex === slides.length - 1 || swiper.isEnd)
+    ) {
+      const lastSnapGridIndex = swiper.snapGrid.length - 1;
+      const gap = Math.abs(
+        swiper.snapGrid[lastSnapGridIndex] - swiper.snapGrid[lastSnapGridIndex - 1],
+      );
+      const swiperTranslate = structuredClone(swiper.snapGrid[lastSnapGridIndex - 1]);
+
+      // Move first item to last position only if active slide is the last slide
+      const firstSlide = slides[0];
+      firstSlide.swiperLoopMoveDOM = true;
+      swiper.slidesEl.append(firstSlide);
+      firstSlide.swiperLoopMoveDOM = false;
+      swiper.setTransition(0);
+      swiper.setTranslate(-(swiperTranslate - gap));
+      swiper.recalcSlides();
+      swiper.updateSlides();
+      swiper.setTransition(swiper.params.speed);
+      swiper.setTranslate(-swiperTranslate);
+    }
+  });
 }
