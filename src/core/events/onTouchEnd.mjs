@@ -189,4 +189,5 @@ export default function onTouchEnd(event) {
       swiper.slideTo(stopIndex);
     }
   }
+  swiper.syncSneakPeekCenter({ speed: swiper.params.speed });
 }
