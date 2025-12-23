@@ -672,7 +672,6 @@ class Swiper {
     swiper.initialized = true;
 
     preload(swiper);
-    swiper.syncSneakPeekCenter();
 
     // Emit
     swiper.emit('init');
