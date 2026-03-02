@@ -110,6 +110,14 @@
       "types": "./swiper-element.d.ts",
       "default": "./swiper-element-bundle.mjs"
     },
+    "./element/gp-bundle": {
+      "types": "./swiper-element.d.ts",
+      "default": "./swiper-element-bundle-gp.mjs"
+    },
+    "./element-gp-bundle": {
+      "types": "./swiper-element.d.ts",
+      "default": "./swiper-element-bundle-gp.mjs"
+    },
     "./element/css/a11y": "./modules/a11y-element.css",
     "./element/css/autoplay": "./modules/autoplay-element.css",
     "./element/css/controller": "./modules/controller-element.css",
@@ -157,6 +165,9 @@
         "./swiper-element.d.ts"
       ],
       "element/bundle": [
+        "./swiper-element.d.ts"
+      ],
+      "element/gp-bundle": [
         "./swiper-element.d.ts"
       ],
       "react": [
