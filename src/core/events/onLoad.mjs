@@ -9,5 +9,8 @@ export default function onLoad(e) {
   ) {
     return;
   }
+  if (e?.target?.tagName !== 'IMG') {
+    return;
+  }
   swiper.update();
 }
