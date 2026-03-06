@@ -169,7 +169,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gempages/swiper.git"
+    "url": "git+https://github.com/gempages/swiper.git"
   },
   "keywords": [
     "swiper",

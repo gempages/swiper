@@ -16,11 +16,14 @@ jobs:
           node-version: 21.2
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Install dependencies
         run: npm install
       - name: Run build
         run: npm run build:prod
       - name: Run release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.NPM_TOKEN != ''
         run: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
