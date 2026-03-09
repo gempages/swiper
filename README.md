@@ -1,4 +1,7 @@
-This is old
+
+<p align="center"> 
+  This is old repo
+</p>
 Go to https://github.com/gempages/os-swiper
 <p align="center"> 
   <img src="https://swiperjs.com/images/share-banner.jpg"/>
