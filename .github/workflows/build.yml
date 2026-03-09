@@ -23,7 +23,7 @@ jobs:
       - name: Run build
         run: npm run build:prod
       - name: Run release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && secrets.NPM_TOKEN != ''
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
