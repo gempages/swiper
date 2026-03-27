@@ -7,7 +7,7 @@ import { babel } from '@rollup/plugin-babel';
 import elapsed from 'elapsed-time-logger';
 import chalk from 'chalk';
 import getElementStyles from './utils/get-element-styles.js';
-import { modules as configModules } from './build-config.js';
+import { modules as configModules, MODULES_GP } from './build-config.js';
 import { capitalizeString } from './utils/helper.js';
 import minify from './utils/minify.js';
 import { banner } from './utils/banner.js';
@@ -25,24 +25,41 @@ export default async function buildModules() {
     }
   });
 
+  const modulesGP = [];
+  MODULES_GP.forEach((name) => {
+    const capitalized = capitalizeString(name);
+    const jsFilePath = `./src/modules/${name}/${name}.mjs`;
+    if (fs.existsSync(jsFilePath)) {
+      modulesGP.push({ name, capitalized });
+    }
+  });
+
   // eslint-disable-next-line
   const modulesPaths = configModules.map((name) => {
     return `./src/modules/${name}/${name}.mjs`;
   });
 
-  // Create element bundle
+  // Create element bundle (full)
   const coreElementContent = fs
     .readFileSync('./src/swiper-element.mjs', 'utf-8')
     .replace(`import Swiper from './swiper.mjs';`, `import Swiper from './swiper-bundle.mjs';`);
   fs.writeFileSync('./src/swiper-element-bundle.mjs', coreElementContent);
+
+  // Create element GP bundle (Core + Navigation + Pagination + Thumbs + Autoplay only)
+  const gpElementContent = fs
+    .readFileSync('./src/swiper-element.mjs', 'utf-8')
+    .replace(`import Swiper from './swiper.mjs';`, `import Swiper from './swiper-bundle-gp.mjs';`);
+  fs.writeFileSync('./src/swiper-element-bundle-gp.mjs', gpElementContent);
 
   const output = await rollup({
     external: ['react', 'vue'],
     input: [
       './src/swiper.mjs',
       './src/swiper-bundle.mjs',
+      './src/swiper-bundle-gp.mjs',
       './src/swiper-element.mjs',
       './src/swiper-element-bundle.mjs',
+      './src/swiper-element-bundle-gp.mjs',
       './src/swiper-vue.mjs',
       './src/swiper-react.mjs',
       ...modulesPaths,
@@ -55,6 +72,10 @@ export default async function buildModules() {
           .map((mod) => `import ${mod.capitalized} from './modules/${mod.name}/${mod.name}.mjs';`)
           .join('\n'),
         '//INSTALL_MODULES': modules.map((mod) => `${mod.capitalized}`).join(',\n  '),
+        '//IMPORT_MODULES_GP': modulesGP
+          .map((mod) => `import ${mod.capitalized} from './modules/${mod.name}/${mod.name}.mjs';`)
+          .join('\n'),
+        '//INSTALL_MODULES_GP': modulesGP.map((mod) => `${mod.capitalized}`).join(',\n  '),
         '//EXPORT': 'export default Swiper; export { Swiper }',
       }),
       nodeResolve({ mainFields: ['module', 'main', 'jsnext'], rootDir: './src' }),
@@ -118,7 +139,7 @@ export default async function buildModules() {
     .filter((f) => f.includes('.mjs'))
     .forEach((f) => {
       let content = fs.readFileSync(`./dist/${f}`, 'utf-8');
-      if (f === 'swiper-bundle.mjs') {
+      if (f === 'swiper-bundle.mjs' || f === 'swiper-bundle-gp.mjs') {
         content = content
           .replace(/from '\.\/swiper-core/g, `from './shared/swiper-core`)
           .replace(
@@ -137,6 +158,12 @@ export default async function buildModules() {
       if (f === 'swiper-element-bundle.mjs') {
         content = content
           .replace('/swiper-bundle.js', `/swiper-bundle.mjs`)
+          .replace('//SWIPER_STYLES', `const SwiperCSS = \`${bundle}\``)
+          .replace('//SWIPER_SLIDE_STYLES', `const SwiperSlideCSS = \`${slide}\``);
+      }
+      if (f === 'swiper-element-bundle-gp.mjs') {
+        content = content
+          .replace('/swiper-bundle-gp.js', `/swiper-bundle-gp.mjs`)
           .replace('//SWIPER_STYLES', `const SwiperCSS = \`${bundle}\``)
           .replace('//SWIPER_SLIDE_STYLES', `const SwiperSlideCSS = \`${slide}\``);
       }
@@ -162,7 +189,7 @@ export default async function buildModules() {
 
   // IIFE
   const replaceExports = {};
-  ['swiper-bundle.mjs', 'swiper.mjs'].forEach((f) => {
+  ['swiper-bundle.mjs', 'swiper-bundle-gp.mjs', 'swiper.mjs'].forEach((f) => {
     const content = fs.readFileSync(`./dist/${f}`, 'utf-8');
     const before = content.match(/export { ([^,]*), ([^}]*) }/)[0];
     const after = before.replace(/export { ([^,]*), ([^}]*) }/, `export {$2}`);
@@ -178,7 +205,14 @@ export default async function buildModules() {
   });
 
   await Promise.all(
-    ['swiper-bundle.mjs', 'swiper.mjs', 'swiper-element.mjs', 'swiper-element-bundle.mjs'].map(
+    [
+      'swiper-bundle.mjs',
+      'swiper-bundle-gp.mjs',
+      'swiper.mjs',
+      'swiper-element.mjs',
+      'swiper-element-bundle.mjs',
+      'swiper-element-bundle-gp.mjs',
+    ].map(
       async (f) => {
         const output = await rollup({
           input: `./dist/${f}`,
@@ -193,14 +227,17 @@ export default async function buildModules() {
         await output.write({
           file: `./dist/${f.replace('.mjs', '.js')}`,
           format: 'iife',
-          name: f === 'swiper-bundle.mjs' || f === 'swiper.mjs' ? 'Swiper' : '',
+          name:
+            f === 'swiper-bundle.mjs' || f === 'swiper-bundle-gp.mjs' || f === 'swiper.mjs'
+              ? 'Swiper'
+              : '',
           banner: banner(f.includes('element') ? 'Custom Element' : ''),
         });
       },
     ),
   );
 
-  ['swiper-bundle.mjs', 'swiper.mjs'].forEach((f) => {
+  ['swiper-bundle.mjs', 'swiper-bundle-gp.mjs', 'swiper.mjs'].forEach((f) => {
     const content = fs.readFileSync(`./dist/${f}`, 'utf-8');
     fs.writeFileSync(
       `./dist/${f}`,
@@ -211,6 +248,7 @@ export default async function buildModules() {
   // REMOVE ELEMENT BUNDLE
   if (isProd) {
     fs.unlinkSync('./src/swiper-element-bundle.mjs');
+    fs.unlinkSync('./src/swiper-element-bundle-gp.mjs');
   }
 
   if (!isProd) {
@@ -248,7 +286,14 @@ export default async function buildModules() {
         return minify(f, `./dist/${f}`, bannerName);
       }),
     // IIFE
-    ...['swiper-bundle.js', 'swiper.js', 'swiper-element.js', 'swiper-element-bundle.js'].map(
+    ...[
+      'swiper-bundle.js',
+      'swiper-bundle-gp.js',
+      'swiper.js',
+      'swiper-element.js',
+      'swiper-element-bundle.js',
+      'swiper-element-bundle-gp.js',
+    ].map(
       (f) => {
         const bannerName = f.includes('element') ? 'Custom Element' : '';
         return minify(f, `./dist/${f}`, bannerName);

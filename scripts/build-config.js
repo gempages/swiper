@@ -28,6 +28,15 @@ export const modules = envBuildModules || [
   'effect-cards',
 ];
 
+/** GPs-only: Core + Navigation + Pagination + Thumbs + Autoplay (for element/gp-bundle) */
+export const MODULES_GP = [
+  'navigation',
+  'pagination',
+  'thumbs',
+  'autoplay',
+];
+
 export default {
   modules,
+  MODULES_GP,
 };
